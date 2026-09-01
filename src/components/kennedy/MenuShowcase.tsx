@@ -1,21 +1,45 @@
+import { useMemo, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Heart, ShoppingCart, ArrowRight, Search } from "lucide-react";
 import { toast } from "sonner";
-import { DISHES, fetchDishes } from "@/lib/menu";
+import { DISHES, fetchDishes, type Dish } from "@/lib/menu";
 import { addToCart, useWishlist } from "@/lib/cart";
 import { GiftRibbon } from "./GiftRibbon";
+
+const ALL = "all";
+
+/** Groups dishes into browsable categories using backend category names first. */
+function categoryOf(dish: Dish) {
+  return dish.categoryName || dish.tag || "Signature";
+}
 
 export function MenuShowcase() {
   const reduce = useReducedMotion();
   const navigate = useNavigate();
   const wishlist = useWishlist();
+  const [active, setActive] = useState<string>(ALL);
 
   const { data: dishes = DISHES } = useQuery({
     queryKey: ["menu-dishes"],
     queryFn: () => fetchDishes(),
   });
+
+  const categories = useMemo(() => {
+    const seen: string[] = [];
+    for (const d of dishes) {
+      const c = categoryOf(d);
+      if (!seen.includes(c)) seen.push(c);
+    }
+    return seen;
+  }, [dishes]);
+
+  const visible = useMemo(
+    () => (active === ALL ? dishes : dishes.filter((d) => categoryOf(d) === active)),
+    [dishes, active],
+  );
+
 
   const add = (slug: string, name: string, then?: () => void) => {
     addToCart(slug, "Regular", 1);
