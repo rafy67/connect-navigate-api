@@ -77,7 +77,7 @@ export async function saveAddress(address: Address): Promise<Address[]> {
   if (isBackendConfigured() && tokens.access()) {
     try {
       if (address.id && typeof address.id === "number") {
-        await api.put(PROFILE.addressDetail(address.id), address);
+        await api.patch(PROFILE.addressDetail(address.id), address);
       } else {
         await api.post(PROFILE.addresses, address);
       }

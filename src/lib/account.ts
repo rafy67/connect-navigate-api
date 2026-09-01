@@ -118,7 +118,7 @@ export async function saveProfile(input: Partial<Profile>): Promise<Profile | nu
   if (input.phone !== undefined) payload["phone"] = input.phone;
   if (input.avatar_url !== undefined) payload["avatar_url"] = input.avatar_url;
 
-  const res = await api.put<BackendProfileResponse>(PROFILE.update, payload);
+  const res = await api.patch<BackendProfileResponse>(PROFILE.update, payload);
   return fetchProfile(res.username);
 }
 
