@@ -219,15 +219,18 @@ function VoiceOrderButtonInner() {
             aria-hidden="true"
           />
         </span>
-        <span className="flex flex-col items-start leading-none text-left">
-          <span className="flex items-center gap-1 font-display text-xs font-black uppercase tracking-wider text-cream">
+        <span className="hidden flex-col items-start text-left leading-none sm:flex">
+          <span className="flex items-center gap-1 font-display text-xs font-black tracking-wider text-cream uppercase">
             Takii <Sparkles className="h-3 w-3 text-gold" />
           </span>
           <span className="mt-0.5 text-[0.65rem] font-semibold tracking-wider text-gold">
             {isConnected ? "Live Voice..." : "Urdu Voice Host"}
           </span>
         </span>
-        <Mic className={`h-4 w-4 ${isConnected ? "text-emerald-400 animate-bounce" : "text-gold"}`} aria-hidden="true" />
+        <Mic
+          className={`hidden h-4 w-4 sm:block ${isConnected ? "animate-bounce text-emerald-400" : "text-gold"}`}
+          aria-hidden="true"
+        />
       </motion.button>
 
       <AnimatePresence>
