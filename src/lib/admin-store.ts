@@ -982,7 +982,7 @@ export async function setRiderStatus(id: string, status: Rider["status"]): Promi
   if (isBackendConfigured() && tokens.access()) {
     startMutation(key);
     try {
-      await api.put(RIDER.dutyStatus, { duty_status: status });
+      await api.post(RIDER.dutyStatus, { duty_status: status });
       await syncLiveBackendData();
       endMutation(key);
       return true;
