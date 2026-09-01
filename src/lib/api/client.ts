@@ -77,15 +77,32 @@ type Options = { query?: Record<string, string | number | boolean | undefined>; 
 let _refreshPromise: Promise<string> | null = null;
 
 /**
- * Normalize API paths coming from the frontend. Some deployments mount Django
- * under an /api/ prefix (e.g. /api/auth/login/). To avoid 404s when callers
- * use /auth/..., map /auth/* -> /api/auth/*.
+ * Canonicalise every request path to the Django URL conf.
+ *
+ * Django mounts the whole DRF surface under `/api/` (`/api/auth/login/`,
+ * `/api/orders/`, `/api/admin/riders/`, ...) and DRF requires the trailing
+ * slash. Frontend modules may spell paths either way (`/orders/` or
+ * `/api/orders/`); this makes both hit the same URL:
+ *   - ensure a leading slash
+ *   - add the `/api` prefix exactly once (never `/api/api/...`)
+ *   - keep the Django admin panel (`/admin/` HTML) out of the API prefix only
+ *     when explicitly spelled `/django-admin/`
+ *   - ensure the DRF trailing slash before any query string
  */
-function normalizePath(p: string): string {
+export function normalizePath(p: string): string {
   let np = p.startsWith("/") ? p : `/${p}`;
-  if (/^\/auth(\/|$)/.test(np)) np = `/api${np}`;
-  return np;
+
+  // Escape hatch for non-API Django routes (admin panel, static, etc.)
+  if (np.startsWith("/django-admin/")) return np.replace("/django-admin", "/admin");
+
+  if (!/^\/api(\/|$)/.test(np)) np = `/api${np}`;
+
+  // DRF: append the trailing slash (before ?query) to avoid APPEND_SLASH redirects
+  const [pathname, query] = np.split("?");
+  const withSlash = pathname!.endsWith("/") ? pathname! : `${pathname}/`;
+  return query ? `${withSlash}?${query}` : withSlash;
 }
+
 
 async function refreshAccessToken(): Promise<string> {
   if (_refreshPromise) return _refreshPromise;
