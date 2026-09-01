@@ -78,14 +78,43 @@ export function MenuShowcase() {
               full story, zoom and nutrition.
             </p>
             <span className="font-display text-xs font-extrabold tracking-[0.24em] text-charcoal/70 uppercase">
-              {dishes.length} Items
+              {visible.length} Items
             </span>
           </div>
         </motion.div>
 
+        {/* sticky category rail — the main way to browse on a phone */}
+        <div className="sticky top-0 z-40 -mx-5 mt-6 border-y border-charcoal/10 bg-cream/92 px-5 py-2.5 backdrop-blur-md sm:-mx-8 sm:px-8 lg:static lg:mx-0 lg:border-0 lg:bg-transparent lg:px-0 lg:backdrop-blur-none">
+          <div
+            className="scrollbar-none flex gap-2 overflow-x-auto"
+            role="tablist"
+            aria-label="Menu categories"
+          >
+            {[ALL, ...categories].map((c) => {
+              const on = active === c;
+              return (
+                <button
+                  key={c}
+                  type="button"
+                  role="tab"
+                  aria-selected={on}
+                  onClick={() => setActive(c)}
+                  className={`shrink-0 rounded-full border px-4 py-2 font-display text-[11px] font-extrabold tracking-[0.14em] uppercase transition-colors ${
+                    on
+                      ? "border-flame bg-flame text-cream shadow-[0_8px_18px_rgba(180,40,20,0.28)]"
+                      : "border-charcoal/15 bg-cream text-charcoal/70"
+                  }`}
+                >
+                  {c === ALL ? "All" : c}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* cards */}
-        <div className="mt-12 grid gap-8 sm:mt-16 sm:grid-cols-2 lg:grid-cols-3">
-          {dishes.map((dish, i) => (
+        <div className="mt-8 grid gap-8 sm:mt-14 sm:grid-cols-2 lg:grid-cols-3">
+          {visible.map((dish, i) => (
             <motion.article
               key={dish.slug}
               initial={reduce ? { opacity: 0 } : { opacity: 0, y: 40, scale: 0.95 }}
