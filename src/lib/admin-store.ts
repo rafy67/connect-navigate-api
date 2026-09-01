@@ -982,7 +982,7 @@ export async function setRiderStatus(id: string, status: Rider["status"]): Promi
   if (isBackendConfigured() && tokens.access()) {
     startMutation(key);
     try {
-      await api.post(RIDER.dutyStatus, { duty_status: status });
+      await api.put(RIDER.dutyStatus, { duty_status: status });
       await syncLiveBackendData();
       endMutation(key);
       return true;
@@ -1043,7 +1043,7 @@ export async function riderAcceptOrder(orderId: string, riderId: string): Promis
   if (isBackendConfigured() && tokens.access()) {
     startMutation(key);
     try {
-      await api.patch(ORDERS.status(orderId), { status: "onway" });
+      await api.post(ORDERS.status(orderId), { status: "onway" });
       await syncLiveBackendData();
       endMutation(key);
       return true;
@@ -1093,7 +1093,7 @@ export async function riderCompleteOrder(orderId: string, riderId: string): Prom
   if (isBackendConfigured() && tokens.access()) {
     startMutation(key);
     try {
-      await api.patch(ORDERS.status(orderId), { status: "delivered" });
+      await api.post(ORDERS.status(orderId), { status: "delivered" });
       await syncLiveBackendData();
       endMutation(key);
       return true;

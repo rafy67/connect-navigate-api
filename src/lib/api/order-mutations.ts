@@ -28,7 +28,7 @@ function requireBackendAuth() {
 
 export async function apiSetOrderStatus(id: string, status: MutationOrderStatus, note = "") {
   requireBackendAuth();
-  return api.patch<{ order_code: string; status: string }>(ORDERS.status(id), {
+  return api.post<{ order_code: string; status: string }>(ORDERS.status(id), {
     status,
     note,
   });
@@ -36,17 +36,17 @@ export async function apiSetOrderStatus(id: string, status: MutationOrderStatus,
 
 export async function apiSetOrderPriority(id: string, priority: MutationPriority) {
   requireBackendAuth();
-  return api.patch(ORDERS.controls(id), { priority });
+  return api.put(ORDERS.controls(id), { priority });
 }
 
 export async function apiSetOrderEta(id: string, etaMinutes: number) {
   requireBackendAuth();
-  return api.patch(ORDERS.controls(id), { eta_minutes: etaMinutes });
+  return api.put(ORDERS.controls(id), { eta_minutes: etaMinutes });
 }
 
 export async function apiSetOrderNotes(id: string, notes: string) {
   requireBackendAuth();
-  return api.patch(ORDERS.controls(id), { internal_notes: notes });
+  return api.put(ORDERS.controls(id), { internal_notes: notes });
 }
 
 export async function apiAssignRider(id: string, riderUserId: number) {
@@ -65,8 +65,11 @@ export async function apiVerifyPayment(
       amount: input.amountPaid !== undefined ? String(input.amountPaid) : undefined,
     });
   }
-  return api.patch(ADMIN.paymentStatus(id), {
+  // Django exposes only GET /api/orders/{id}/payment-status/ — non-verified
+  // transitions go through the same POST verify-payment endpoint.
+  return api.post(ADMIN.verifyPayment(id), {
     payment_status: input.status,
+    reference: input.reference ?? "",
   });
 }
 
@@ -77,7 +80,7 @@ export async function apiDeleteOrder(id: string) {
 
 export async function apiRiderAcceptOrder(orderId: string) {
   requireBackendAuth();
-  return api.patch(ORDERS.status(orderId), { status: "onway" });
+  return api.post(ORDERS.status(orderId), { status: "onway" });
 }
 
 export async function apiRiderRejectOrder(orderId: string, reason: string) {
@@ -87,12 +90,12 @@ export async function apiRiderRejectOrder(orderId: string, reason: string) {
 
 export async function apiRiderCompleteOrder(orderId: string) {
   requireBackendAuth();
-  return api.patch(ORDERS.status(orderId), { status: "delivered" });
+  return api.post(ORDERS.status(orderId), { status: "delivered" });
 }
 
 export async function apiSetRiderStatus(status: "online" | "offline" | "busy") {
   requireBackendAuth();
-  return api.post(RIDER.dutyStatus, { duty_status: status });
+  return api.put(RIDER.dutyStatus, { duty_status: status });
 }
 
 export async function apiSetRiderLocation(location: { lat: number; lng: number } | null) {

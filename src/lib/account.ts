@@ -118,7 +118,7 @@ export async function saveProfile(input: Partial<Profile>): Promise<Profile | nu
   if (input.phone !== undefined) payload["phone"] = input.phone;
   if (input.avatar_url !== undefined) payload["avatar_url"] = input.avatar_url;
 
-  const res = await api.patch<BackendProfileResponse>(PROFILE.update, payload);
+  const res = await api.put<BackendProfileResponse>(PROFILE.update, payload);
   return fetchProfile(res.username);
 }
 
@@ -273,7 +273,7 @@ export async function rateOrder(orderId: string | number, rating: number): Promi
 
 export async function updateOrderStatus(orderId: string, status: OrderStatusKey) {
   if (isBackendConfigured() && tokens.access()) {
-    await api.patch(ORDERS.status(orderId), { status });
+    await api.post(ORDERS.status(orderId), { status });
     await fetchOrders();
     return;
   }
