@@ -5,7 +5,7 @@
  * viewport. Respects the user's reduced-motion preference.
  */
 import { motion, type Variants } from "framer-motion";
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
@@ -19,6 +19,30 @@ const OFFSET: Record<Direction, { x?: number; y?: number; scale?: number }> = {
   fade: {},
   zoom: { scale: 0.9 },
 };
+
+/**
+ * Guards against un-triggerable reveals: when a block is taller than the
+ * viewport (very common on phones), a ratio threshold can never be met, so the
+ * content would stay invisible forever. In that case fall back to "some".
+ */
+function useSafeAmount(amount: number) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [safe, setSafe] = useState<number | "some">(amount);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const check = () => {
+      const h = el.getBoundingClientRect().height;
+      setSafe(h > 0 && h * amount > window.innerHeight * 0.75 ? "some" : amount);
+    };
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, [amount]);
+
+  return { ref, safe };
+}
 
 export function Reveal({
   children,
@@ -36,21 +60,24 @@ export function Reveal({
   className?: string;
 }) {
   const reduced = useReducedMotion();
+  const { ref, safe } = useSafeAmount(amount);
 
   if (reduced) return <div className={className}>{children}</div>;
 
   return (
     <motion.div
+      ref={ref}
       className={className}
       initial={{ opacity: 0, x: 0, y: 0, scale: 1, ...OFFSET[from] }}
       whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }}
-      viewport={{ once: true, amount }}
+      viewport={{ once: true, amount: safe }}
       transition={{ duration, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
   );
 }
+
 
 /** Staggered children container — pair with <RevealItem>. */
 const containerVariants: Variants = {
