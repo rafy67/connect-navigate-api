@@ -101,10 +101,10 @@ export function VoltScene({
             {volt.line}
           </div>
 
-          <VoltRobot volt={volt} />
+          <AuthShowpiece volt={volt} />
 
           <p className="mt-4 max-w-xs text-center text-[11px] leading-relaxed text-charcoal/60">
-            Chef Volt guards the dough — and your password. He looks away, promise.
+            Signature seekh &amp; malai boti — grilled over open charcoal, sealed hot for your door.
           </p>
 
           <button
