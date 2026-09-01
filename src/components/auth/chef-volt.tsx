@@ -2,7 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { ChefHat, Flame, Pause, Play } from "lucide-react";
 
-import authGrill from "@/assets/auth-grill.jpg";
+import authChef from "@/assets/auth-chef-anime.png";
 import type { ChefVolt } from "@/hooks/use-chef-volt";
 import { readCalmOverride, setCalmOverride } from "@/hooks/use-reduced-motion";
 import { cn } from "@/lib/utils";
@@ -16,7 +16,7 @@ export function AuthShowpiece({ volt }: { volt: ChefVolt }) {
     <figure className={cn("auth-showpiece", volt.spinning && "auth-showpiece-lit")} aria-hidden="true">
       <span className="auth-showpiece-glow" />
       <img
-        src={authGrill}
+        src={authChef}
         alt=""
         width={1024}
         height={1280}
@@ -25,7 +25,7 @@ export function AuthShowpiece({ volt }: { volt: ChefVolt }) {
       />
       <span className="auth-showpiece-badge">
         <Flame className="h-3.5 w-3.5" aria-hidden="true" />
-        Charcoal fired daily
+        Chef Kennedy · fired fresh
       </span>
     </figure>
   );
