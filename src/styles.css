@@ -2951,3 +2951,18 @@ img[loading="lazy"]:not([style]) {
 .volt-calm .auth-showpiece-glow { animation: none; }
 .volt-calm .auth-showpiece-img { animation: none; }
 
+
+/* ── Mobile action layer ──────────────────────────────────────────────────── */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+/* Keep the last row of content reachable above the persistent cart bar. */
+@media (max-width: 639px) {
+  body {
+    padding-bottom: var(--kmg-cart-bar, 0px);
+    transition: padding-bottom 0.24s ease;
+  }
+}
