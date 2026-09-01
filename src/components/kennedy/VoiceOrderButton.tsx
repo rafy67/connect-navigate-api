@@ -194,7 +194,10 @@ function VoiceOrderButtonInner() {
         transition={{ type: "spring", stiffness: 260, damping: 22, delay: 0.8 }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="fixed bottom-5 right-4 z-[150] flex items-center gap-2.5 rounded-full border border-gold/50 bg-charcoal/95 py-2 pl-2 pr-4 shadow-[0_12px_32px_rgba(0,0,0,0.45)] backdrop-blur-md sm:bottom-8 sm:right-8 cursor-pointer"
+        style={{
+          bottom: "calc(1.25rem + var(--kmg-cart-bar, 0px) + env(safe-area-inset-bottom))",
+        }}
+        className="fixed right-4 z-[150] flex cursor-pointer items-center gap-2.5 rounded-full border border-gold/50 bg-charcoal/95 p-1.5 shadow-[0_12px_32px_rgba(0,0,0,0.45)] backdrop-blur-md sm:right-8 sm:py-2 sm:pl-2 sm:pr-4"
         aria-label="Takii — your Urdu voice guide"
       >
         <span className="relative flex h-9 w-9 shrink-0 items-center justify-center">
