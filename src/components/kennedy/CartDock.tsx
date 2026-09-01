@@ -132,7 +132,7 @@ export function CartDock() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.97 }}
               transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-              className="fixed bottom-24 left-4 z-[160] flex max-h-[70vh] w-[min(24rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-3xl border-2 border-charcoal/10 bg-cream shadow-[0_30px_70px_rgba(20,14,10,0.28)]"
+              className="fixed inset-x-3 bottom-[calc(5.25rem+env(safe-area-inset-bottom))] z-[160] flex max-h-[70vh] flex-col overflow-hidden rounded-3xl border-2 border-charcoal/10 bg-cream shadow-[0_30px_70px_rgba(20,14,10,0.28)] sm:inset-x-auto sm:bottom-24 sm:left-4 sm:w-[min(24rem,calc(100vw-2rem))]"
             >
               <header className="flex items-center justify-between border-b border-charcoal/10 px-5 py-3.5">
                 <h2 className="font-display text-sm font-extrabold uppercase tracking-[0.18em] text-charcoal">
