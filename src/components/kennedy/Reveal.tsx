@@ -92,19 +92,22 @@ const itemVariants: Variants = {
 
 export function RevealGroup({ children, className }: { children: ReactNode; className?: string }) {
   const reduced = useReducedMotion();
+  const { ref, safe } = useSafeAmount(0.2);
   if (reduced) return <div className={className}>{children}</div>;
   return (
     <motion.div
+      ref={ref}
       className={className}
       variants={containerVariants}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, amount: 0.2 }}
+      viewport={{ once: true, amount: safe }}
     >
       {children}
     </motion.div>
   );
 }
+
 
 export function RevealItem({ children, className }: { children: ReactNode; className?: string }) {
   const reduced = useReducedMotion();
