@@ -113,7 +113,7 @@ function Index() {
   });
 
   return (
-    <div className="relative overflow-hidden bg-cream">
+    <div className="relative overflow-x-clip bg-cream">
       {/* scroll-zoom track for the hero (desktop only — mobile keeps a single clean screen) */}
       <div ref={heroTrackRef} className={zoom ? "relative h-[170vh]" : "relative"}>
       <motion.div

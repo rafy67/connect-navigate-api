@@ -20,12 +20,20 @@ const OFFSET: Record<Direction, { x?: number; y?: number; scale?: number }> = {
   zoom: { scale: 0.9 },
 };
 
+/**
+ * Reveals trigger as soon as any part of the block scrolls in, with a small
+ * bottom margin so it starts just before it is fully on screen. Ratio-based
+ * thresholds are avoided on purpose: a block taller than the viewport (very
+ * common on phones) could never satisfy them and stayed invisible forever.
+ */
+const VIEWPORT = { once: true, amount: "some", margin: "0px 0px -12% 0px" } as const;
+
 export function Reveal({
   children,
   from = "up",
   delay = 0,
   duration = 0.7,
-  amount = 0.25,
+  amount: _amount = 0.25,
   className,
 }: {
   children: ReactNode;
@@ -44,13 +52,14 @@ export function Reveal({
       className={className}
       initial={{ opacity: 0, x: 0, y: 0, scale: 1, ...OFFSET[from] }}
       whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }}
-      viewport={{ once: true, amount }}
+      viewport={VIEWPORT}
       transition={{ duration, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
   );
 }
+
 
 /** Staggered children container — pair with <RevealItem>. */
 const containerVariants: Variants = {
@@ -72,12 +81,13 @@ export function RevealGroup({ children, className }: { children: ReactNode; clas
       variants={containerVariants}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, amount: 0.2 }}
+      viewport={VIEWPORT}
     >
       {children}
     </motion.div>
   );
 }
+
 
 export function RevealItem({ children, className }: { children: ReactNode; className?: string }) {
   const reduced = useReducedMotion();
