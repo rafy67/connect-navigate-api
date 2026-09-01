@@ -50,7 +50,7 @@ export function MenuShowcase() {
   };
 
   return (
-    <section id="menu" className="relative overflow-hidden bg-cream py-16 sm:py-24">
+    <section id="menu" className="relative overflow-x-clip bg-cream py-16 sm:py-24">
       <div className="pointer-events-none absolute inset-0 menu-grain" aria-hidden="true" />
 
       <div className="relative mx-auto max-w-[1440px] px-5 sm:px-8">
