@@ -17,7 +17,7 @@ export const Route = createFileRoute("/signup")({
       {
         name: "description",
         content:
-          "Join Kennedy Moon Grill as a customer, staff member or rider — Chef Volt, our dough-guarding robot, sets up your console.",
+          "Join Kennedy Moon Grill as a customer, staff member or rider and get your matching console in seconds.",
       },
       { property: "og:title", content: "Create Your Account — Kennedy Moon Grill" },
       {
@@ -39,7 +39,7 @@ const ROLES: { key: AccountRole; icon: typeof UserRound }[] = [
 
 function SignupPage() {
   const navigate = useNavigate();
-  const volt = useChefVolt("New here? Let's get you a crust card.");
+  const volt = useChefVolt("New here? Let's set your table.");
   const [role, setRole] = useState<AccountRole>("customer");
   const [form, setForm] = useState({ name: "", email: "", phone: "", password: "" });
   const [showPass, setShowPass] = useState(false);
@@ -148,7 +148,7 @@ function SignupPage() {
       volt={volt}
       eyebrow="Join the grill"
       title="Create account"
-      subtitle="Choose your role — customer, staff or rider — and Chef Volt builds the matching dashboard."
+      subtitle="Choose your role — customer, staff or rider — and we build the matching dashboard."
       footer={
         <>
           Already have an account?{" "}

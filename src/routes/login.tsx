@@ -17,12 +17,12 @@ export const Route = createFileRoute("/login")({
       {
         name: "description",
         content:
-          "Sign in to Kennedy Moon Grill — Chef Volt, our dough-guarding robot, keeps your password safe while you track live orders.",
+          "Sign in to Kennedy Moon Grill — track live charcoal-grilled orders, saved addresses and rider updates in one place.",
       },
       { property: "og:title", content: "Sign In — Kennedy Moon Grill" },
       {
         property: "og:description",
-        content: "One account for guests, kitchen staff, delivery riders and admin — guarded by Chef Volt.",
+        content: "One account for guests, kitchen staff, delivery riders and admin.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -40,7 +40,7 @@ const ROLES: { key: AccountRole; icon: typeof UserRound }[] = [
 
 function LoginPage() {
   const navigate = useNavigate();
-  const volt = useChefVolt("Beep boop. Hungry human, who goes there?");
+  const volt = useChefVolt("Welcome back — the charcoal is already glowing.");
   const [role, setRole] = useState<AccountRole>("customer");
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
@@ -66,7 +66,7 @@ function LoginPage() {
     try {
       const [account] = await Promise.all([signIn(email, pass, role), minPending]);
       const target = ROLE_HOME[account.role] || ROLE_HOME[role] || "/profile";
-      volt.celebrate("Oven's hot. Welcome back to Kennedy Moon Grill!");
+      volt.celebrate("Grill's hot. Welcome back to Kennedy Moon Grill!");
       toast.success(`Welcome back, ${account.name}`);
       setTimeout(() => navigate({ to: target }), 900);
     } catch (err: unknown) {
@@ -87,7 +87,7 @@ function LoginPage() {
       volt={volt}
       eyebrow="Welcome back"
       title="Sign in"
-      subtitle="Pick how you're arriving tonight — Chef Volt will drop you into the right console."
+      subtitle="Pick how you're arriving tonight — we'll drop you into the right console."
       footer={
         <>
           New to the grill?{" "}

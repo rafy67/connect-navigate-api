@@ -1,65 +1,33 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { ChefHat, Pause, Play } from "lucide-react";
+import { ChefHat, Flame, Pause, Play } from "lucide-react";
 
+import authGrill from "@/assets/auth-grill.jpg";
 import type { ChefVolt } from "@/hooks/use-chef-volt";
 import { readCalmOverride, setCalmOverride } from "@/hooks/use-reduced-motion";
 import { cn } from "@/lib/utils";
 
 /**
- * Chef Volt — the dough-guarding robot mascot who reacts to the auth form:
- * follows the cursor, watches you type, turns around for passwords and
- * throws confetti when you're in.
+ * Premium charcoal-grill showpiece for the auth screens: a framed signature
+ * platter with a soft ember glow. Replaces the old robot mascot.
  */
-export function VoltRobot({ volt }: { volt: ChefVolt }) {
-  const { mood, turned, blink, spinning, look, tilt } = volt;
-  const eyesClosed = blink || turned;
-
+export function AuthShowpiece({ volt }: { volt: ChefVolt }) {
   return (
-    <div
-      ref={volt.robotRef}
-      className={cn("volt", turned && "volt-turned", spinning && "volt-spin", `volt-${mood}`)}
-      style={
-        {
-          "--rx": `${tilt.rx}deg`,
-          "--ry": `${tilt.ry}deg`,
-          "--lx": `${look.x}px`,
-          "--ly": `${look.y}px`,
-        } as React.CSSProperties
-      }
-      aria-hidden="true"
-    >
-      <div className="volt-body">
-        <span className="volt-antenna">
-          <span className="volt-antenna-bulb" />
-        </span>
-
-        <div className="volt-hat">
-          <span className="volt-hat-band" />
-        </div>
-
-        <div className="volt-head">
-          <div className="volt-face">
-            <span className={cn("volt-eye", eyesClosed && "volt-eye-shut")} />
-            <span className={cn("volt-eye", eyesClosed && "volt-eye-shut")} />
-            <span className={cn("volt-mouth", `volt-mouth-${mood}`)} />
-            <span className="volt-blush volt-blush-l" />
-            <span className="volt-blush volt-blush-r" />
-          </div>
-          <span className="volt-back">
-            <span className="volt-bolt" />
-            <span className="volt-bolt" />
-          </span>
-        </div>
-
-        <div className="volt-torso">
-          <span className="volt-chest">KMG</span>
-          <span className="volt-arm volt-arm-l" />
-          <span className="volt-arm volt-arm-r" />
-        </div>
-      </div>
-      <span className="volt-shadow" />
-    </div>
+    <figure className={cn("auth-showpiece", volt.spinning && "auth-showpiece-lit")} aria-hidden="true">
+      <span className="auth-showpiece-glow" />
+      <img
+        src={authGrill}
+        alt=""
+        width={1024}
+        height={1280}
+        loading="lazy"
+        className="auth-showpiece-img"
+      />
+      <span className="auth-showpiece-badge">
+        <Flame className="h-3.5 w-3.5" aria-hidden="true" />
+        Charcoal fired daily
+      </span>
+    </figure>
   );
 }
 
@@ -88,7 +56,7 @@ export function VoltStrength({ volt }: { volt: ChefVolt }) {
   );
 }
 
-/** Full auth layout: Chef Volt stage on one side, the form card on the other. */
+/** Full auth layout: signature grill showpiece on one side, the form card on the other. */
 export function VoltScene({
   volt,
   eyebrow,
@@ -133,10 +101,10 @@ export function VoltScene({
             {volt.line}
           </div>
 
-          <VoltRobot volt={volt} />
+          <AuthShowpiece volt={volt} />
 
           <p className="mt-4 max-w-xs text-center text-[11px] leading-relaxed text-charcoal/60">
-            Chef Volt guards the dough — and your password. He looks away, promise.
+            Signature seekh &amp; malai boti — grilled over open charcoal, sealed hot for your door.
           </p>
 
           <button
