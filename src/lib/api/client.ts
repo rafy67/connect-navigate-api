@@ -17,8 +17,17 @@
  *          router beforeLoad guard redirects to /login automatically.
  */
 
-export const API_BASE_URL: string =
-  (import.meta.env["VITE_API_BASE_URL"] as string | undefined)?.replace(/\/$/, "") ?? "";
+/**
+ * Backend host root. Accepts the env var with or without a trailing `/api`
+ * (and with or without a trailing slash) — the `/api` prefix is added per
+ * request by `normalizePath()`, so both spellings resolve to the same URL and
+ * never produce `/api/api/...`.
+ */
+export const API_BASE_URL: string = (
+  (import.meta.env["VITE_API_BASE_URL"] as string | undefined) ?? ""
+)
+  .replace(/\/+$/, "")
+  .replace(/\/api$/, "");
 
 export const AUTH_MODE: "jwt" | "session" =
   (import.meta.env["VITE_API_AUTH_MODE"] as "jwt" | "session" | undefined) ?? "jwt";
