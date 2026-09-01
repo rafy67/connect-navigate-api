@@ -15,7 +15,7 @@ import { Mic, Square, X, Loader2, Volume2, LogIn, Sparkles } from "lucide-react"
 import { Link } from "@tanstack/react-router";
 import { ConversationProvider, useConversation } from "@elevenlabs/react";
 import { useAccount } from "@/lib/auth";
-import { tokens, API_BASE_URL } from "@/lib/api/client";
+import { tokens, API_BASE_URL, normalizePath } from "@/lib/api/client";
 import { ELEVENLABS } from "@/lib/api/endpoints";
 import caddyAvatar from "@/assets/caddy-avatar.jpg";
 
