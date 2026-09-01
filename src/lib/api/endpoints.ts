@@ -87,12 +87,25 @@ export const ADMIN = {
   verifyRider: (id: number | string) => `/admin/riders/${id}/verify/`,
 } as const;
 
+export const ELEVENLABS = {
+  /** GET -> {signed_url, is_guest, user} for the WebRTC voice agent */
+  signedUrl: "/elevenlabs/signed-url/",
+} as const;
+
+export const VOICE = {
+  /** POST -> create an order through the AI voice agent */
+  order: "/orders/voice-order/",
+  /** GET -> status of the in-flight voice order */
+  status: "/orders/voice-status/",
+} as const;
+
 export const RIDER = {
   /** GET -> { assigned: Order[] } for the logged-in rider */
   jobs: "/orders/rider-jobs/",
   accept: (id: string | number) => `/orders/${id}/status/`,
   reject: (id: string | number) => `/orders/${id}/reject/`,
   location: (id: string | number) => `/orders/${id}/rider-location/`,
+  /** Not exposed by Django yet — callers fall back to local data on 404 */
   earnings: "/rider/earnings/",
   profile: "/rider/profile/",
   dutyStatus: "/rider/duty-status/",

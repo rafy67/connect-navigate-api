@@ -16,6 +16,7 @@ import { Link } from "@tanstack/react-router";
 import { ConversationProvider, useConversation } from "@elevenlabs/react";
 import { useAccount } from "@/lib/auth";
 import { tokens, API_BASE_URL } from "@/lib/api/client";
+import { ELEVENLABS } from "@/lib/api/endpoints";
 import caddyAvatar from "@/assets/caddy-avatar.jpg";
 
 type Turn = { role: "user" | "assistant"; content: string };
@@ -37,8 +38,9 @@ async function fetchSignedUrl(): Promise<{
   const headers: Record<string, string> = { "Content-Type": "application/json" };
   if (accessToken) headers["Authorization"] = `Bearer ${accessToken}`;
 
-  const base = API_BASE_URL.replace(/\/$/, "");
-  const url = base.endsWith("/api") ? `${base}/elevenlabs/signed-url/` : `${base}/api/elevenlabs/signed-url/`;
+  // Single source of truth for URL shape: client.normalizePath() adds the
+  // Django /api prefix + trailing slash exactly once.
+  const url = `${API_BASE_URL}${normalizePath(ELEVENLABS.signedUrl)}`;
 
   const res = await fetch(url, { headers });
   if (!res.ok) throw new Error("Signed URL fetch failed");
