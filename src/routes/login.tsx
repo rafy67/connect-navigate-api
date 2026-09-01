@@ -87,7 +87,7 @@ function LoginPage() {
       volt={volt}
       eyebrow="Welcome back"
       title="Sign in"
-      subtitle="Pick how you're arriving tonight — Chef Volt will drop you into the right console."
+      subtitle="Pick how you're arriving tonight — we'll drop you into the right console."
       footer={
         <>
           New to the grill?{" "}
