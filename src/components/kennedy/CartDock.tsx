@@ -33,17 +33,31 @@ export function CartDock() {
     setOpen(false);
   }, [pathname]);
 
-  if (pathname === "/cart" || pathname === "/auth") return null;
+  const hidden = pathname === "/cart" || pathname === "/auth";
+
+  /**
+   * Publishes the height of the mobile cart bar so other floating widgets
+   * (e.g. the voice host) can sit above it instead of overlapping CTAs.
+   */
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const el = document.documentElement;
+    el.style.setProperty("--kmg-cart-bar", !hidden && count > 0 ? "4.5rem" : "0px");
+    return () => el.style.setProperty("--kmg-cart-bar", "0px");
+  }, [count, hidden]);
+
+  if (hidden) return null;
 
   return (
     <>
+      {/* Desktop / tablet: compact floating bag */}
       <motion.button
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-label={`Cart, ${count} items`}
         animate={bump ? { scale: [1, 1.16, 1] } : { scale: 1 }}
         transition={{ duration: 0.4 }}
-        className="fixed bottom-5 left-5 z-[160] flex h-14 w-14 items-center justify-center rounded-full bg-flame text-cream shadow-[0_16px_34px_rgba(180,40,20,0.4)]"
+        className="fixed bottom-5 left-5 z-[160] hidden h-14 w-14 items-center justify-center rounded-full bg-flame text-cream shadow-[0_16px_34px_rgba(180,40,20,0.4)] sm:flex"
       >
         <ShoppingBag className="h-6 w-6" aria-hidden="true" />
         {count > 0 && (
@@ -52,6 +66,56 @@ export function CartDock() {
           </span>
         )}
       </motion.button>
+
+      {/* Mobile: one persistent money bar — count, live total, single action */}
+      <AnimatePresence>
+        {count > 0 && (
+          <motion.div
+            initial={{ y: 90 }}
+            animate={{ y: 0 }}
+            exit={{ y: 90 }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-x-0 bottom-0 z-[160] pb-[env(safe-area-inset-bottom)] sm:hidden"
+          >
+            <div className="mx-3 mb-3 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border border-charcoal/10 bg-charcoal px-3 py-2.5 shadow-[0_18px_38px_rgba(20,14,10,0.35)]">
+              <button
+                type="button"
+                onClick={() => setOpen(true)}
+                className="flex min-w-0 items-center gap-2.5 text-left"
+                aria-label={`Open cart, ${count} items`}
+              >
+                <motion.span
+                  animate={bump ? { scale: [1, 1.18, 1] } : { scale: 1 }}
+                  transition={{ duration: 0.4 }}
+                  className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-flame text-cream"
+                >
+                  <ShoppingBag className="h-[18px] w-[18px]" aria-hidden="true" />
+                  <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full border-2 border-charcoal bg-cream px-1 font-display text-[10px] font-extrabold text-charcoal">
+                    {count}
+                  </span>
+                </motion.span>
+                <span className="min-w-0">
+                  <span className="block truncate font-display text-[11px] font-extrabold tracking-[0.16em] text-cream/60 uppercase">
+                    {selected.length}/{items.length} selected
+                  </span>
+                  <span className="block font-display text-base font-extrabold text-cream">
+                    Rs {selectedSubtotal}
+                  </span>
+                </span>
+              </button>
+              <button
+                type="button"
+                disabled={selected.length === 0}
+                onClick={() => void navigate({ to: "/cart" })}
+                className="shrink-0 rounded-xl bg-flame px-4 py-3 font-display text-[11px] font-extrabold tracking-[0.16em] text-cream uppercase disabled:opacity-50"
+              >
+                Checkout
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
 
       <AnimatePresence>
         {open && (
