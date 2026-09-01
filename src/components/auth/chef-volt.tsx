@@ -56,7 +56,7 @@ export function VoltStrength({ volt }: { volt: ChefVolt }) {
   );
 }
 
-/** Full auth layout: Chef Volt stage on one side, the form card on the other. */
+/** Full auth layout: signature grill showpiece on one side, the form card on the other. */
 export function VoltScene({
   volt,
   eyebrow,
