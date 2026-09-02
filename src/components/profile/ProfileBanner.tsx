@@ -2,6 +2,7 @@
  * Customer profile banner: charcoal-grill hero image, ringed avatar and stats.
  * Presentation only — all data arrives as props from src/routes/profile.tsx.
  */
+import { useRef } from "react";
 import { motion } from "framer-motion";
 import { BadgeCheck, Camera } from "lucide-react";
 
