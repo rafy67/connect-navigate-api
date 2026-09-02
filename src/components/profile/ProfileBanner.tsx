@@ -19,6 +19,7 @@ type Props = {
   tier?: string;
   stats: ProfileStat[];
   onChangeAvatar?: () => void;
+  onPickAvatar?: (file: File) => void;
 };
 
 export function ProfileBanner({
@@ -29,7 +30,11 @@ export function ProfileBanner({
   tier = "Flame member",
   stats,
   onChangeAvatar,
+  onPickAvatar,
 }: Props) {
+  const fileRef = useRef<HTMLInputElement>(null);
+  const canEditPhoto = !!(onPickAvatar || onChangeAvatar);
+
   return (
     <motion.section
       initial={{ opacity: 0, y: 18 }}
