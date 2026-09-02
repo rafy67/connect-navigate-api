@@ -104,6 +104,8 @@ function ProfilePage() {
   const [joined, setJoined] = useState<string | null>(null);
   const [tab, setTab] = useState<TabId>("overview");
   const [savedAddresses, setSavedAddresses] = useState<Address[]>([]);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
 
   const wishlist = useWishlist();
   const likes = useLikes();
