@@ -314,7 +314,7 @@ function ProfilePage() {
           <button
             type="button"
             onClick={() => void resetLocal()}
-            className="flex items-center gap-1.5 rounded-full border-2 border-charcoal/12 px-4 py-2 font-display text-[11px] font-extrabold uppercase tracking-[0.16em] text-charcoal/70 hover:border-flame hover:text-flame"
+            className="hidden items-center gap-1.5 rounded-full border-2 border-charcoal/12 px-4 py-2 font-display text-[11px] font-extrabold uppercase tracking-[0.16em] text-charcoal/70 hover:border-flame hover:text-flame sm:flex"
           >
             <LogOut className="h-3.5 w-3.5" aria-hidden="true" /> Exit
           </button>
@@ -325,33 +325,52 @@ function ProfilePage() {
           name={displayName}
           email={email}
           joined={joined}
-          avatarUrl={profile?.avatar_url ?? null}
+          avatarUrl={avatarPreview || profile?.avatar_url || null}
           stats={[
             { label: "Orders", value: String(orders.length) },
             { label: "Spent", value: money(spent) },
             { label: "Saved", value: String(wishlist.slugs.length + likes.slugs.length) },
           ]}
-          onChangeAvatar={() =>
-            toast.info("Photo upload connects to PATCH /api/v1/profiles/me/ (see README).")
-          }
+          onPickAvatar={(file) => {
+            setAvatarPreview(URL.createObjectURL(file));
+            toast.success("Photo updated on this device");
+          }}
         />
 
-        <section className="mt-4 grid gap-px overflow-hidden rounded-[1.5rem] border-2 border-charcoal/10 bg-charcoal/10 sm:grid-cols-3">
-          <Detail icon={<UserIcon className="h-4 w-4" aria-hidden="true" />} label="Name">
-            {profile?.full_name || "Added with your first order"}
-          </Detail>
-          <Detail icon={<Phone className="h-4 w-4" aria-hidden="true" />} label="Phone">
-            {profile?.phone || "Added with your first order"}
-          </Detail>
-          <Detail icon={<MapPin className="h-4 w-4" aria-hidden="true" />} label="Address">
-            {[profile?.street, profile?.city].filter(Boolean).join(", ") ||
-              "Added with your first order"}
-          </Detail>
+        {/* account details — collapsed by default on mobile */}
+        <section className="mt-4 overflow-hidden rounded-[1.5rem] border-2 border-charcoal/10">
+          <button
+            type="button"
+            onClick={() => setDetailsOpen((v) => !v)}
+            aria-expanded={detailsOpen}
+            className="flex w-full items-center justify-between gap-3 bg-white/70 px-5 py-3.5 text-left sm:hidden"
+          >
+            <span className="flex items-center gap-2 font-display text-[11px] font-extrabold uppercase tracking-[0.18em] text-charcoal/70">
+              <UserIcon className="h-4 w-4" aria-hidden="true" /> Account details
+            </span>
+            <span className="font-body text-[11px] text-charcoal/50">
+              {detailsOpen ? "Hide" : "Show"}
+            </span>
+          </button>
+          <div
+            className={`grid gap-px bg-charcoal/10 sm:grid-cols-3 ${detailsOpen ? "grid" : "hidden sm:grid"}`}
+          >
+            <Detail icon={<UserIcon className="h-4 w-4" aria-hidden="true" />} label="Name">
+              {profile?.full_name || "Added with your first order"}
+            </Detail>
+            <Detail icon={<Phone className="h-4 w-4" aria-hidden="true" />} label="Phone">
+              {profile?.phone || "Added with your first order"}
+            </Detail>
+            <Detail icon={<MapPin className="h-4 w-4" aria-hidden="true" />} label="Address">
+              {[profile?.street, profile?.city].filter(Boolean).join(", ") ||
+                "Added with your first order"}
+            </Detail>
+          </div>
         </section>
 
 
         {/* tabs */}
-        <nav className="scrollbar-none mt-6 flex gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible">
+        <nav className="scrollbar-none sticky top-0 z-30 -mx-5 mt-6 flex gap-2 overflow-x-auto bg-cream/95 px-5 py-2 backdrop-blur sm:static sm:mx-0 sm:flex-wrap sm:overflow-visible sm:bg-transparent sm:px-0 sm:backdrop-blur-none">
           {TABS.map((t) => {
             const active = tab === t.id;
             const badge =
